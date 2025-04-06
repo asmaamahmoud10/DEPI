@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
 import { ViewComponent } from './view/view.component';
@@ -16,4 +16,4 @@ import { ViewComponent } from './view/view.component';
     CommonModule
   ]
 })
-export class PostsModule { }
+export class NotesModule { }
