@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NoteService } from '../note.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create',
@@ -14,7 +15,7 @@ export class CreateComponent {
 
   //profileData
   adressData
-  constructor(private builder:FormBuilder,private noteservice:NoteService) { }
+  constructor(private builder:FormBuilder,private noteservice:NoteService,private router: Router) { }
   ngOnInit(): void {
     this.initForm();
   }
@@ -28,18 +29,29 @@ export class CreateComponent {
       
     });
   }
-  
+  errorMessage = '';
+  isLoading = false;
+
+
+
   onSubmit() {
     if (this.noteForm.valid) {
+      this.isLoading = true;
      // console.log(this.noteForm);
       //console.log(this.profileData.value);
       this.noteservice.ctreateNotes(this.noteForm.value).subscribe((res)=>{
+        this.isLoading = false;
         console.log('Response',res);
+        //this.noteForm.reset();///remove the form data
         //navigate to notes page
+        this.router.navigate(['/home']);///
       },(err)=>{
+        this.isLoading = false;
         //errors from backend handling on status code 401,403
+        this.errorMessage = "Something went wrong. Please try again later.";
         console.log('Error',err.error.errors);//error from backend 
-        //navigate to login page and remove token from local storage
+        
+        //navigate to login page and remove token from local storage////////////
       }
 
     );
@@ -59,6 +71,20 @@ export class CreateComponent {
       tags: 'Doe',
     });
   }
+  // Method to confirm before updating or saving
+ // Method to confirm before updating or saving
+confirmAction(action: string) {
+  const confirmation = window.confirm(`Are you sure you want to ${action}?`);
+  if (confirmation) {
+    if (action === 'save') {
+      this.onSubmit();
+    } else if (action === 'update') { 
+      this.updatenotes();
+    } else if (action === 'cancel') {
+      this.noteForm.reset();
+    }
+  }
+}
 
 
   get valid(){

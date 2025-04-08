@@ -16,11 +16,26 @@ export class JwtInterceptor implements HttpInterceptor {
     console.log('JwtInterceptor');
 
     
+    const token = localStorage.getItem('token'); 
+
+    if (token) {
+      console.log('Token found:', token);
+      request = request.clone({
+        setHeaders: {
+          'Authorization': `Bearer ${token}` // add the token to the request header
+        }
+      });
+    }
+
+
+/* 
+
     request= request.clone({
       setHeaders:{
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJpYXQiOjE3NDMwMzc2NTAsImV4cCI6MTc0MzA4MDg1MH0.BgL5QiZyAes_qCeAL91JnxgqJ_oFSgCtb0NWNfmVxCM'
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJpYXQiOjE3NDQxMzU5MzUsImV4cCI6MTc0NDE3OTEzNX0.JzL3aWT907Lu4SUAJNn-FQhyKRoCPNzuEFAwFFX2FiQ'
       }
     })
+    console.log('Authorization Header:', request.headers.get('Authorization')); */
 
 
     return next.handle(request);
