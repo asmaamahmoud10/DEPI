@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NoteService } from '../note.service';
 import { Router } from '@angular/router';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -15,8 +15,10 @@ export class CreateComponent {
 
   //profileData
   adressData
-  constructor(private builder:FormBuilder,private noteservice:NoteService,private router: Router) { }
+  constructor(private builder:FormBuilder,private noteservice:NoteService,private router: Router,private toastr: ToastrService) { }
   ngOnInit(): void {
+    
+
     this.initForm();
   }
   initForm() {
@@ -42,9 +44,12 @@ export class CreateComponent {
       this.noteservice.ctreateNotes(this.noteForm.value).subscribe((res)=>{
         this.isLoading = false;
         console.log('Response',res);
+        this.showSuccess();
         //this.noteForm.reset();///remove the form data
         //navigate to notes page
-        this.router.navigate(['/home']);///
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 1000);
       },(err)=>{
         this.isLoading = false;
         //errors from backend handling on status code 401,403
@@ -56,12 +61,17 @@ export class CreateComponent {
 
     );
 
-
-    
-
     }
    
   }
+
+
+  showSuccess() {
+    this.toastr.success('success', 'Created Successfully');
+  }
+
+
+
   updatenotes() {
     this.noteForm.patchValue({
       title: 'John',
