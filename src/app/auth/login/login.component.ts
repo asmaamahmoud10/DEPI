@@ -1,4 +1,7 @@
+// src/app/pages/login/login.component.ts
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -6,20 +9,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  email = '';
+  password = '';
+  error = '';
 
-  constructor() {}
+  constructor(private auth: AuthService, private router: Router) {}
 
-  onSubmit(): void {
-    if (this.email && this.password) {
-      console.log('Logging in with', this.email, this.password);
-    } else {
-      console.error('Please fill in both email and password');
-    }
-  }
-
-  onSignup(): void {
-    console.log('Redirecting to signup...');
+  login() {
+    this.auth.login(this.email, this.password).subscribe({
+      next: (res) => {
+        this.auth.setToken(res.token);
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.error = 'Invalid email or password';
+      }
+    });
   }
 }
