@@ -10,10 +10,12 @@ import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { HomeComponent } from './home/home/home.component';
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
